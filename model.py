@@ -18,13 +18,16 @@ def helper(input_dim,output_dim,input_length,weights):
     return model
 
 
-def model(input_dim,output_dim = 100,input_length = 100,weights):
+def QuestionPair(input_dim = 100,output_dim = 100,input_length = 100,weights = None,name = None):
     mq1 = helper(input_dim,output_dim,input_length,weights)
     mq2 = helper(input_dim,output_dim,input_length,weights)
     x = Multiply()([mq1.output,mq2.output])
     x = Flatten()(x)
-    x = Dense(32,activation="relu")(x)
+    x = Dense(16,activation="relu")(x)
     x = Dense(2,activation="softmax")(x)
-    model = Model(inputs = [mq1.input,mq2.input], outputs = x)
-    return model
+    return Model(inputs = [mq1.input,mq2.input], outputs = x, name = name)
 
+
+if __name__ == "__main__":
+    model = QuestionPair(input_dim=100,output_dim=100,input_length=100,weights=None,name="PairNet")
+    print(model.summary())
