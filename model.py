@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow.keras.layers import Bidirectional, LSTM, Dropout
 from tensorflow.keras.layers import Embedding, Dense, Flatten
 from tensorflow.keras.models import Model,Sequential
-from tensorflow.keras.layers import BatchNormalization,Multiply
+from tensorflow.keras.layers import BatchNormalization,Concatenate
 from tensorflow.keras.models import Sequential, Model
 
 def helper(input_dim,output_dim,input_length,weights):
@@ -18,11 +18,12 @@ def helper(input_dim,output_dim,input_length,weights):
     return model
 
 
-def QuestionPair(input_dim = 100,output_dim = 100,input_length = 100,weights = None,name = None):
+def QuestionPair(input_dim = 100,output_dim = 100,input_length = 100,weights = None,name="PairNet"):
     mq1 = helper(input_dim,output_dim,input_length,weights)
     mq2 = helper(input_dim,output_dim,input_length,weights)
-    x = Multiply()([mq1.output,mq2.output])
+    x = Concatenate()([mq1.output,mq2.output])
     x = Flatten()(x)
+    x = Dense(32,activation="relu")(x)
     x = Dense(16,activation="relu")(x)
     x = Dense(2,activation="softmax")(x)
     return Model(inputs = [mq1.input,mq2.input], outputs = x, name = name)
