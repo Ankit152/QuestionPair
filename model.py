@@ -7,7 +7,7 @@ from tensorflow.keras.models import Sequential, Model
 
 def helper(input_dim,output_dim,input_length,weights):
     model = Sequential()
-    model.add(Embedding(input_dim=input_dim,output_dim=output_dim,input_length=input_length,weights=[weights],trainable=False))
+    model.add(Embedding(input_dim=input_dim,output_dim=output_dim,input_length=input_length,weights=weights,trainable=False))
     model.add(Bidirectional(LSTM(128, activation = 'tanh', return_sequences = True)))
     model.add(Dropout(0.2))
     model.add(Bidirectional(LSTM(128, activation = 'relu', return_sequences = True)))
